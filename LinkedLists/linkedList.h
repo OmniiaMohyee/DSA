@@ -8,7 +8,7 @@ class LinkedList{
     
 public:
     LinkedList(){
-        head = new Node();
+        head = nullptr;
     }
 
     Node* getHead(){
@@ -44,9 +44,10 @@ public:
         Node* ptr = head;
         while(ptr != nullptr)
         {
-            cout<<ptr->getData();
+            cout<<ptr->getData()<<" ";
             ptr = ptr->getNext();
         }
+        cout<<endl;
 
     }
 
@@ -91,7 +92,7 @@ public:
             while(lHead != nullptr)
             {
                 if(i == pHead->getData()){
-                    cout<<lHead->getData();
+                    cout<<"L["<<i<<"]: "<<lHead->getData()<<endl;
                     break;
                 }
                 i++;
@@ -122,12 +123,12 @@ public:
         Node* fast= this->head->getNext();
         int i = slow->getData();
         i++;
-        while(slow != nullptr){
-            if(i != slow->getData())
-                this->insertAfter(fast, i);
+        while(fast != nullptr){
+            if(i != fast->getData())
+                this->insertAfter(slow, i);
             i++;
             slow = slow->getNext();
-            fast = fast->getNext();
+            fast = slow->getNext();
         }
     }
 
@@ -174,9 +175,9 @@ public:
         Node* slow = this->head;
         Node* fast = slow->getNext();
 
-        while(slow != nullptr){
-            if(slow->getNext() < 0)
-                this->deleteAfter(fast);
+        while(fast != nullptr){
+            if(fast->getData() < 0)
+                this->deleteAfter(slow);
 
             slow = slow->getNext();
             fast = slow->getNext();
@@ -229,7 +230,7 @@ public:
 
         //special case: we want to swap with the head.
         if(small == 0){
-            Node* later = this->getAtIndex(large-1);
+            Node* later = this->getAtIndex(large);
             if(later == nullptr) return false;
             if(later->getNext() == nullptr) return false;
 
@@ -254,7 +255,7 @@ public:
             later->setNext(first->getNext());
             first->setNext(z);
 
-            Node* z = later->getNext()->getNext();
+            z = later->getNext()->getNext();
             later->getNext()->setNext(first->getNext()->getNext());
             first->getNext()->setNext(z);
   
@@ -303,29 +304,33 @@ public:
     //Q10
     Node** alternateSplit()
     {
-        if(this->head == nullptr) return;
+        if(this->head == nullptr) return nullptr;
         Node* ptr = head;
         Node* ptr2 = head->getNext();
-        if(ptr2 == nullptr) return;
+        if(ptr2 == nullptr) return nullptr;
         int i = 0;
         Node* tmp = ptr2->getNext();
         while(tmp != nullptr)
         {
-            if(i%2 == 0)
+            if(i%2 == 0){
                 ptr->setNext(tmp);
-            else
+                ptr = ptr->getNext();
+            }
+            else{
                 ptr2->setNext(tmp);
+                ptr2 = ptr2->getNext();
+            }
 
             tmp = tmp->getNext();
-            ptr = ptr->getNext();
-            ptr2 = ptr2->getNext();
+            // ptr = ptr->getNext();
+            // ptr2 = ptr2->getNext();
             i++;
 
         }
 
         Node** ptrs = new Node*[2];
-        ptrs[0] = ptr;
-        ptrs[1] = ptr2;
+        ptrs[0] = head;
+        ptrs[1] = head->getNext();
         return ptrs;
     }
 
